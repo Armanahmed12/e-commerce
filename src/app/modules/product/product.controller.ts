@@ -26,26 +26,30 @@ const createProduct = async (req: Request, res: Response) => {
   }
 };
 
-// get all products from database
-const getAllProducts = async (req: Request, res: Response) => {
+// get all products from database Or find doc with query string
+const getAllOrSpecificProducts = async (req: Request, res: Response) => {
   try {
+
     const isExistedSearchTerm = req.query.searchTerm;
-    console.log(req.query.searchTerm);
     if (isExistedSearchTerm) {
+      const result = await ProductServices.getAllOrSpecificProductsFromDB(
+        isExistedSearchTerm as string,
+      );
       res.status(200).json({
         success: true,
-        message: 'Products fetched successfully!',
-        query: isExistedSearchTerm,
+        message: "Products matching search term 'iphone' fetched successfully!",
+        data: result,
       });
-    }
-     else {
-      console.log('after query false');
-      const result = await ProductServices.getAllProductsFromDB();
+     
+    } else {
+      const result = await ProductServices.getAllOrSpecificProductsFromDB(false);
+      
       res.status(200).json({
         success: true,
         message: 'Products fetched successfully!',
         data: result,
       });
+
     }
   } catch (err) {
     console.log(err);
@@ -106,10 +110,9 @@ const deleteOneSpecificDoc = async (req: Request, res: Response) => {
   }
 };
 
-
 export const ProductController = {
   createProduct,
-  getAllProducts,
+  getAllOrSpecificProducts,
   getASpecificProductById,
   findAndUpdateProduct,
   deleteOneSpecificDoc,

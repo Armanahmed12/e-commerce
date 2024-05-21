@@ -7,7 +7,7 @@ const router = express.Router();
 // router.post('/create-student', StudentController.createStudent);
 
 router.post('/', ProductController.createProduct);
-router.get('/', ProductController.getAllProducts);
+router.get('/', ProductController.getAllOrSpecificProducts);
 router.get('/:productId', ProductController.getASpecificProductById);
 
 router.put('/:productId', ProductController.findAndUpdateProduct);

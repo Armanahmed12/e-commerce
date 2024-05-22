@@ -12,19 +12,10 @@ const createProductIntoDB = async (productData: Product) => {
 const getAllOrSpecificProductsFromDB = async (
   hasQueryParam: boolean | string,
 ) => {
-
   if (typeof hasQueryParam == 'string') {
-    
-    const regex = new RegExp(hasQueryParam, 'i'); 
-    const docs = await ProductModel.find({ 
-         
-           $or : [
-
-            { name : regex },
-            { description : regex },
-            { category : regex }
-
-           ]
+    const regex = new RegExp(hasQueryParam, 'i');
+    const docs = await ProductModel.find({
+      $or: [{ name: regex }, { description: regex }, { category: regex }],
     });
     return docs;
   } else {

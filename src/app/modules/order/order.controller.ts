@@ -1,10 +1,9 @@
-import express, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { OrderServices } from './order.service';
 import orderValidationSchema from './order.validation';
 
 // adding an order to db with modifying the a pd's quantity by productId of "Order" Data.
 const insertOrderData = async (req: Request, res: Response) => {
-
   try {
     const orderData = req.body;
     // Data validation with Zod
@@ -15,8 +14,8 @@ const insertOrderData = async (req: Request, res: Response) => {
       await OrderServices.findPdWithOrderPdIdToUpdateQuantityFromDB(
         parsedDataWithZod,
       );
-        
-      // for positive response
+
+    // for positive response
     if (result.success) {
       const createdOrderIntoDB =
         await OrderServices.createANewOrderIntoDB(parsedDataWithZod);
@@ -25,7 +24,7 @@ const insertOrderData = async (req: Request, res: Response) => {
         message: 'Order created successfully!',
         data: createdOrderIntoDB,
       });
-    } 
+    }
     // negative response
     else if (!result.success) {
       res.status(500).json({
@@ -33,46 +32,37 @@ const insertOrderData = async (req: Request, res: Response) => {
         message: result.message,
       });
     }
-  } 
-
-  // catch block if there is any err inside the try block
-  catch (err) {
+  } catch (err) {
+    // catch block if there is any err inside the try block
     res.status(500).json({
       success: false,
-      message: "Order not found",
-    }); 
-   }
-
+      message: 'Order not found',
+    });
+  }
 };
 
 // get all Orders from database Or specific orders with query string
 const getAllOrSpecificOrders = async (req: Request, res: Response) => {
-
   try {
+    const { email } = req.query;
+    const isExistedEmail = email ? true : false;
 
-    let {email} = req.query;
-    let isExistedEmail = email ? true : false;
-    
     // this "if" condition will check in db to know if there are docs in bd with this email. if there is no data, return this func from inside.
-    if(isExistedEmail){
-
+    if (isExistedEmail) {
       const result = await OrderServices.getAllOrSpecificOrdersFromDB(
         email as string,
       );
-    
-        if(result.length == 0){
 
-          res.status(500).json({
-            success: false,
-            message: "Order not found"
-          }); 
-        }
-
+      if (result.length == 0) {
+        res.status(500).json({
+          success: false,
+          message: 'Order not found',
+        });
+      }
     }
 
     // all orders which are found by the email inside db.
     if (isExistedEmail) {
-     
       const result = await OrderServices.getAllOrSpecificOrdersFromDB(
         email as string,
       );
@@ -82,11 +72,10 @@ const getAllOrSpecificOrders = async (req: Request, res: Response) => {
         message: 'Orders fetched successfully for user email!',
         data: result,
       });
-    } 
-    
-    // all orders from db
-    else if(isExistedEmail == false) {
+    }
 
+    // all orders from db
+    else if (isExistedEmail == false) {
       const result = await OrderServices.getAllOrSpecificOrdersFromDB(false);
 
       res.status(200).json({
@@ -95,17 +84,13 @@ const getAllOrSpecificOrders = async (req: Request, res: Response) => {
         data: result,
       });
     }
-
-
   } catch (err) {
-     res.status(500).json({
+    res.status(500).json({
       success: false,
       message: 'Something went wrong',
       error: err,
-    }); 
+    });
   }
-
-
 };
 
 export const OrderController = {

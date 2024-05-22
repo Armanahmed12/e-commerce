@@ -29,26 +29,22 @@ const createProduct = async (req: Request, res: Response) => {
 // get all products from database Or find doc with query string
 const getAllOrSpecificProducts = async (req: Request, res: Response) => {
   try {
-    const isExistedSearchTerm = req.query;
-    const hasQueryParam =  Object.values(req.query);
+    const hasQueryParam = Object.values(req.query);
     console.log(hasQueryParam);
-     // this "if" condition will check in db to know if there are docs in bd with this SearchTeam. if there is no data, return this func from inside.
-    if(hasQueryParam.length > 0){
-       
+    // this "if" condition will check in db to know if there are docs in bd with this SearchTeam. if there is no data, return this func from inside.
+    if (hasQueryParam.length > 0) {
       const result = await ProductServices.getAllOrSpecificProductsFromDB(
-        hasQueryParam[0] as string
+        hasQueryParam[0] as string,
       );
-    
-        if(result.length == 0){
 
-          res.status(500).json({
-            success: false,
-            message: "Product not found"
-          }); 
-        }
-
+      if (result.length == 0) {
+        res.status(500).json({
+          success: false,
+          message: 'Product not found',
+        });
+      }
     }
-   // data fetching from db based on SearchTeam query param
+    // data fetching from db based on SearchTeam query param
     if (hasQueryParam.length > 0) {
       const result = await ProductServices.getAllOrSpecificProductsFromDB(
         hasQueryParam[0] as string,
@@ -58,9 +54,9 @@ const getAllOrSpecificProducts = async (req: Request, res: Response) => {
         message: "Products matching search term 'iphone' fetched successfully!",
         data: result,
       });
-    } 
+    }
     // if there is no query
-     if(hasQueryParam.length == 0) {
+    if (hasQueryParam.length == 0) {
       const result =
         await ProductServices.getAllOrSpecificProductsFromDB(false);
 
@@ -70,13 +66,11 @@ const getAllOrSpecificProducts = async (req: Request, res: Response) => {
         data: result,
       });
     }
-  
-  } 
-  // when makes an error
-  catch (err) {
+  } catch (err) {
+    // when makes an error
     res.status(500).json({
       success: false,
-      message: 'Products not found'
+      message: 'Products not found',
     });
   }
 };
@@ -87,27 +81,24 @@ const getASpecificProductById = async (req: Request, res: Response) => {
     const productId = req.params.productId;
     console.log(productId);
     const result = await ProductServices.getSpecificProductFromDB(productId);
-    console.log('sp pd from db res: ', result);
     if (result) {
       res.status(200).json({
         success: true,
         message: 'Product fetched successfully!',
         data: result,
-      })
-    } else{
-
-        res.status(500).json({
-          success: false,
-          message: "Order not found",
-        }); 
-      }
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Order not found',
+      });
     }
-// if there is any error
-  catch (err) {
+  } catch (err) {
+    // if there is any error
     res.status(500).json({
       success: false,
-      message: "Product not found",
-    }); 
+      message: 'Product not found',
+    });
   }
 };
 

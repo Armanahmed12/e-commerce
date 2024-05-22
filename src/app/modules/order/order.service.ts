@@ -8,8 +8,23 @@ const createANewOrderIntoDB = async( OrderData : OrderInterface ) =>{
       return result;
 }
 
+// get all Or specific orders from DB
+const getAllOrSpecificOrdersFromDB = async(hasQueryParam: boolean | string) =>{
+
+    if (typeof hasQueryParam == 'string') {
+        const regex = new RegExp(hasQueryParam, 'i');
+        const docs = await OrderModel.find({ email : regex });
+        return docs;
+      }
+       else {
+        return await OrderModel.find();
+      }
+}
+
+
 export const OrderServices = {
 
     createANewOrderIntoDB,
+    getAllOrSpecificOrdersFromDB,
 
 }

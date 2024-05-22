@@ -2,17 +2,29 @@ import { ObjectId } from 'mongodb';
 import { ProductModel } from './product.model';
 import { Product } from './product.interface';
 
+// create a new Pd to database
 const createProductIntoDB = async (productData: Product) => {
   const result = await ProductModel.create(productData);
   return result;
 };
 
+// get all Or specific Products from DB
 const getAllOrSpecificProductsFromDB = async (
   hasQueryParam: boolean | string,
 ) => {
-  console.log(hasQueryParam, typeof hasQueryParam);
+
   if (typeof hasQueryParam == 'string') {
-    const docs = await ProductModel.find({ description: /iPhone/i });
+    const regex = new RegExp(hasQueryParam, 'i'); 
+    const docs = await ProductModel.find({
+         
+           $or : [
+
+            { name : regex },
+            { description : regex }, // Add more fields as needed
+            { category : regex }
+
+           ]
+    });
     console.log(docs, 'docs service');
     return docs;
   } else {

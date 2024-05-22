@@ -31,21 +31,20 @@ const findPdWithOrderPdIdToUpdateQuantityFromDB = async( orderData : OrderInterf
              {_id : new ObjectId(orderData.productId)},
              { $set : { inventory : { quantity : restQuantity, inStock : hasInStock } } }
          );
-         return { success : true, message : "One specific pd's quantity has been decreased in DB" }
+         return { success : true}
      }
 
     //  when pd's quantity is less than Order's quantity.
      else if(quantity < orderData.quantity){
 
-        return { success : false, message : "insufficient stock! following your ordered's product quantity." }
+        return { success : false, message : "Insufficient quantity available in inventory." }
            
      }
 
     }
 
-
     // if orderData's productId doesn't match any pd's _id of db
-    return { success : false, message : "No Product data found with Order's productId"};
+    return { success : false, message : "Order not found" };
 }
 
 

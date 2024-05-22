@@ -3,9 +3,6 @@ import { ProductController } from './product.controller';
 
 const router = express.Router();
 
-// here we will call the controller function
-// router.post('/create-student', StudentController.createStudent);
-
 router.post('/', ProductController.createProduct);
 router.get('/', ProductController.getAllOrSpecificProducts);
 router.get('/:productId', ProductController.getASpecificProductById);

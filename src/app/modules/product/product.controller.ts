@@ -115,5 +115,5 @@ export const ProductController = {
   getAllOrSpecificProducts,
   getASpecificProductById,
   findAndUpdateProduct,
-  deleteOneSpecificDoc,
+  deleteOneSpecificDoc
 };

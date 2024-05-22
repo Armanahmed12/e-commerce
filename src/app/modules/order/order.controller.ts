@@ -1,13 +1,13 @@
 import express, { Request, Response } from 'express';
 import { OrderServices } from './order.service';
 
+// adding an order to db with modifying the a pd's quantity by productId of "Order" Data.  
 const insertOrderData = async (req: Request, res: Response) => {
   const orderData = req.body;
   // response based on a func which let us create a order in DB
   const result =
     await OrderServices.findPdWithOrderPdIdToUpdateQuantityFromDB(orderData);
 
-  console.log('result ', result);
   if (result.success) {
 
      const createdOrderIntoDB = await OrderServices.createANewOrderIntoDB(orderData);

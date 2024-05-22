@@ -14,18 +14,18 @@ const getAllOrSpecificProductsFromDB = async (
 ) => {
 
   if (typeof hasQueryParam == 'string') {
+    
     const regex = new RegExp(hasQueryParam, 'i'); 
-    const docs = await ProductModel.find({
+    const docs = await ProductModel.find({ 
          
            $or : [
 
             { name : regex },
-            { description : regex }, // Add more fields as needed
+            { description : regex },
             { category : regex }
 
            ]
     });
-    console.log(docs, 'docs service');
     return docs;
   } else {
     return await ProductModel.find();

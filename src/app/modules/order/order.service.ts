@@ -1,7 +1,7 @@
 import { ProductModel } from "../product/product.model";
 import { OrderInterface } from "./order.interface";
 import { OrderModel } from "./order.model";
-
+import { ObjectId } from 'mongodb';
 
 // Create a New Order
 const createANewOrderIntoDB = async( OrderData : OrderInterface ) =>{
@@ -11,29 +11,42 @@ const createANewOrderIntoDB = async( OrderData : OrderInterface ) =>{
      
 }
 
-// // finding a specific doc with Id from products collection DB 
-    //   const foundPdDocWithOrderId = await ProductModel.findOne( { _id : new ObjectId(createdOrder.productId) } );
-      
-    //    if(foundPdDocWithOrderId){
+// finding a specific pd with Order's productId field to UPdate from DB
 
-    //     // The found pd's quantity & inStock's value
-    //        const { quantity, inStock } = foundPdDocWithOrderId.inventory;
-    //     if(quantity > createdOrder.quantity){
+const findPdWithOrderPdIdToUpdateQuantityFromDB = async( orderData : OrderInterface ) =>{
 
-    //            console.log("big", 'fpd=', quantity, 'OQan', createdOrder.quantity);
-    //            const restQuantity = quantity - createdOrder.quantity;
-    //            await ProductModel.updateOne(
-    //             {_id : new ObjectId(createdOrder.productId)},
-    //             { $set : { inventory : { quantity : restQuantity } } }
-    //         )  
-    //     }
-    //     else if(quantity < createdOrder.quantity){
+    const foundPdDocWithOrderId = await ProductModel.findOne( { _id : new ObjectId(orderData.productId) } );
 
-    //           console.log("insufficient stock! following your ordered product quantity.")
-              
-    //     }
+    //  if we get any pd based or "orderData's" productId field
+    if(foundPdDocWithOrderId){
 
-    //    }
+     // The found pd's quantity & inStock's value
+        const { quantity, inStock } = foundPdDocWithOrderId.inventory;
+
+     if(quantity >= orderData.quantity && inStock){
+
+            const restQuantity = quantity - orderData.quantity;
+            const hasInStock = (quantity == 1) ? false : true;
+            await ProductModel.updateOne(
+             {_id : new ObjectId(orderData.productId)},
+             { $set : { inventory : { quantity : restQuantity, inStock : hasInStock } } }
+         );
+         return { success : true, message : "One specific pd's quantity has been decreased in DB" }
+     }
+
+    //  when pd's quantity is less than Order's quantity.
+     else if(quantity < orderData.quantity){
+
+        return { success : false, message : "insufficient stock! following your ordered's product quantity." }
+           
+     }
+
+    }
+
+
+    // if orderData's productId doesn't match any pd's _id of db
+    return { success : false, message : "No Product data found with Order's productId"};
+}
 
 
 // get all Or specific orders from DB
@@ -54,5 +67,6 @@ export const OrderServices = {
 
     createANewOrderIntoDB,
     getAllOrSpecificOrdersFromDB,
+    findPdWithOrderPdIdToUpdateQuantityFromDB
 
 }

@@ -4,6 +4,8 @@ import { OrderServices } from "./order.service";
 const insertOrderData = async( req : Request, res : Response ) =>{
 
          const orderData = req.body;
+         // finding a specific doc with OrderData pd'sId DB 
+      
          const result = await OrderServices.createANewOrderIntoDB(orderData);
 
          res.status(200).json({

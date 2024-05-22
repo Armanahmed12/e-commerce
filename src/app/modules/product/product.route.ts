@@ -13,8 +13,4 @@ router.get('/:productId', ProductController.getASpecificProductById);
 router.put('/:productId', ProductController.findAndUpdateProduct);
 router.delete('/:productId', ProductController.deleteOneSpecificDoc);
 
-// router.get('/');
-
-// router.get('/:studentId');
-
 export const ProductRoutes = router;

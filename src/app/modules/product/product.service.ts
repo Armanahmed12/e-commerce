@@ -4,8 +4,6 @@ import { Product } from './product.interface';
 
 const createProductIntoDB = async (productData: Product) => {
   const result = await ProductModel.create(productData);
-  //   const student = new Student(studentData);
-  //   const result = await student.save(); // built in mongoose method
   return result;
 };
 

@@ -10,6 +10,7 @@ const orderSchema = new Schema<OrderInterface>({
   productId: {
     type: String,
     required: true,
+    unique : true,
   },
   price: {
     type: Number,

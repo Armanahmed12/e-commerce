@@ -30,7 +30,7 @@ const createProduct = async (req: Request, res: Response) => {
 const getAllOrSpecificProducts = async (req: Request, res: Response) => {
   try {
     const hasQueryParam = Object.values(req.query);
-    console.log(hasQueryParam);
+
     // this "if" condition will check in db to know if there are docs in bd with this SearchTeam. if there is no data, return this func from inside.
     if (hasQueryParam.length > 0) {
       const result = await ProductServices.getAllOrSpecificProductsFromDB(
@@ -79,7 +79,7 @@ const getAllOrSpecificProducts = async (req: Request, res: Response) => {
 const getASpecificProductById = async (req: Request, res: Response) => {
   try {
     const productId = req.params.productId;
-    console.log(productId);
+
     const result = await ProductServices.getSpecificProductFromDB(productId);
     if (result) {
       res.status(200).json({

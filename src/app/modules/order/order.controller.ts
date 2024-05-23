@@ -33,10 +33,20 @@ const insertOrderData = async (req: Request, res: Response) => {
       });
     }
   } catch (err) {
+   
+    // if there is duplicated error
+    if(Object.keys(err as object).length > 0){
+
+      res.status(500).json({
+        success: false,
+        error : err
+      });
+        
+    }
     // catch block if there is any err inside the try block
     res.status(500).json({
       success: false,
-      message: 'Order not found',
+      message: 'Order not found.',
     });
   }
 };

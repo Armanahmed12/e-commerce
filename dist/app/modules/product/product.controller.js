@@ -40,7 +40,6 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 const getAllOrSpecificProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const hasQueryParam = Object.values(req.query);
-        console.log(hasQueryParam);
         // this "if" condition will check in db to know if there are docs in bd with this SearchTeam. if there is no data, return this func from inside.
         if (hasQueryParam.length > 0) {
             const result = yield product_service_1.ProductServices.getAllOrSpecificProductsFromDB(hasQueryParam[0]);
@@ -82,7 +81,6 @@ const getAllOrSpecificProducts = (req, res) => __awaiter(void 0, void 0, void 0,
 const getASpecificProductById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const productId = req.params.productId;
-        console.log(productId);
         const result = yield product_service_1.ProductServices.getSpecificProductFromDB(productId);
         if (result) {
             res.status(200).json({
